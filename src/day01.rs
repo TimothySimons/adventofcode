@@ -61,7 +61,6 @@ pub fn part2(file_path: &str) -> u32 {
 
     for result in reader.lines() {
         let line = result.unwrap();
-
         if line.is_empty() {
             replace_min(&mut highest_sums, current_sum);
             current_sum = 0;
@@ -71,7 +70,6 @@ pub fn part2(file_path: &str) -> u32 {
     }
 
     replace_min(&mut highest_sums, current_sum);
-
     return highest_sums.iter().sum::<u32>();
 }
 
@@ -93,14 +91,14 @@ fn replace_min(vec: &mut [u32], value: u32) {
 // 1. "Anybody that thinks just read the code and think about it, that's an insane statement." - John Carmack.
 // * Always code with a debugger *
 //
-// 2. In the part 1 solution, we holding all the puzzle data in memory (twice).
+// 2. In the part 1 solution, we're holding all the puzzle data in memory (twice).
 // We're going to construct a lazy solution this time...
 //
-// 3. cmd + click to go to definition.
+// 3. cmd + click to go to definition (VSCode).
 //
 // 4. Using a slice reference &[u32] instead of a vector reference &Vec<u32> in the type definition.
-// &Vec<u32> as a argument type would require a vector be allocated on the heap prior to calling the function.
+// &Vec<u32> as an argument type would require a vector be allocated on the heap prior to calling the function.
 // &Vec<u32> will be automatically coerced into a &[u32] anyway.
 //
-// 5. We need to pass a mutable *reference* to the argument vector; This is known as a mutable borrow.
+// 5. We need to pass a mutable *reference* to the argument slice; This is known as a mutable borrow.
 // See https://doc.rust-lang.org/1.8.0/book/references-and-borrowing.html
