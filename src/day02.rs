@@ -52,8 +52,7 @@ pub fn part1(file_path: &str) -> u32 {
     let mut total = 0;
     for line in lines {
         let mut inputs = line.split(' ');
-        let input1 = inputs.next().unwrap();
-        let input2 = inputs.next().unwrap();
+        let (input1, input2) = (inputs.next().unwrap(), inputs.next().unwrap());
         let (p1, p2) = get_player_choices(input1, input2);
         let (_, score) = play_game(p1, p2);
         total += score;
@@ -68,8 +67,7 @@ pub fn part2(file_path: &str) -> u32 {
     let mut total = 0;
     for line in lines {
         let mut inputs = line.split(' ');
-        let input1 = inputs.next().unwrap();
-        let input2 = inputs.next().unwrap();
+        let (input1, input2) = (inputs.next().unwrap(), inputs.next().unwrap());
         let (p1, p2) = get_player_choices2(input1, input2);
         let (_, score) = play_game(p1, p2);
         total += score;
