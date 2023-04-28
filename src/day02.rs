@@ -9,38 +9,38 @@ const PAPER_VALUE: u32 = 2;
 const SCISSORS_VALUE: u32 = 3;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
-enum RQS {
+enum RPS {
     Rock,
     Paper,
     Scissors,
 }
 
-impl RQS {
+impl RPS {
     fn value(&self) -> u32 {
         match self {
-            RQS::Rock => ROCK_VALUE,
-            RQS::Paper => PAPER_VALUE,
-            RQS::Scissors => SCISSORS_VALUE,
+            RPS::Rock => ROCK_VALUE,
+            RPS::Paper => PAPER_VALUE,
+            RPS::Scissors => SCISSORS_VALUE,
         }
     }
 
-    fn stronger(&self) -> RQS {
+    fn stronger(&self) -> RPS {
         match self {
-            RQS::Rock => RQS::Paper,
-            RQS::Paper => RQS::Scissors,
-            RQS::Scissors => RQS::Rock,
+            RPS::Rock => RPS::Paper,
+            RPS::Paper => RPS::Scissors,
+            RPS::Scissors => RPS::Rock,
         }
     }
 
-    fn equal(&self) -> RQS {
+    fn equal(&self) -> RPS {
         *self
     }
 
-    fn weaker(&self) -> RQS {
+    fn weaker(&self) -> RPS {
         match self {
-            RQS::Rock => RQS::Scissors,
-            RQS::Paper => RQS::Rock,
-            RQS::Scissors => RQS::Paper,
+            RPS::Rock => RPS::Scissors,
+            RPS::Paper => RPS::Rock,
+            RPS::Scissors => RPS::Paper,
         }
     }
 }
@@ -77,27 +77,27 @@ pub fn part2(file_path: &str) -> u32 {
     total
 }
 
-fn get_player_choices(input1: &str, input2: &str) -> (RQS, RQS) {
+fn get_player_choices(input1: &str, input2: &str) -> (RPS, RPS) {
     let p1 = match input1 {
-        "A" => RQS::Rock,
-        "B" => RQS::Paper,
-        "C" => RQS::Scissors,
+        "A" => RPS::Rock,
+        "B" => RPS::Paper,
+        "C" => RPS::Scissors,
         _ => panic!("Unexpected puzzle input: {input1}"),
     };
     let p2 = match input2 {
-        "X" => RQS::Rock,
-        "Y" => RQS::Paper,
-        "Z" => RQS::Scissors,
+        "X" => RPS::Rock,
+        "Y" => RPS::Paper,
+        "Z" => RPS::Scissors,
         _ => panic!("Unexpected puzzle input: {input2}"),
     };
     (p1, p2)
 }
 
-fn get_player_choices2(input1: &str, input2: &str) -> (RQS, RQS) {
+fn get_player_choices2(input1: &str, input2: &str) -> (RPS, RPS) {
     let p1 = match input1 {
-        "A" => RQS::Rock,
-        "B" => RQS::Paper,
-        "C" => RQS::Scissors,
+        "A" => RPS::Rock,
+        "B" => RPS::Paper,
+        "C" => RPS::Scissors,
         _ => panic!("Unexpected puzzle input: {input1}"),
     };
 
@@ -110,12 +110,12 @@ fn get_player_choices2(input1: &str, input2: &str) -> (RQS, RQS) {
     (p1, p2)
 }
 
-fn play_game(p1: RQS, p2: RQS) -> (u32, u32) {
+fn play_game(p1: RPS, p2: RPS) -> (u32, u32) {
     if p1 == p2 {
         return (p1.value() + DRAW, p2.value() + DRAW);
-    } else if (p1 == RQS::Rock && p2 == RQS::Scissors)
-        || (p1 == RQS::Paper && p2 == RQS::Rock)
-        || (p1 == RQS::Scissors && p2 == RQS::Paper)
+    } else if (p1 == RPS::Rock && p2 == RPS::Scissors)
+        || (p1 == RPS::Paper && p2 == RPS::Rock)
+        || (p1 == RPS::Scissors && p2 == RPS::Paper)
     {
         return (p1.value() + WIN, p2.value() + LOSE);
     }
