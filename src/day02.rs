@@ -8,7 +8,7 @@ const ROCK_VALUE: u32 = 1;
 const PAPER_VALUE: u32 = 2;
 const SCISSORS_VALUE: u32 = 3;
 
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 enum RPS {
     Rock,
     Paper,
@@ -100,7 +100,6 @@ fn get_player_choices2(input1: &str, input2: &str) -> (RPS, RPS) {
         "C" => RPS::Scissors,
         _ => panic!("Unexpected puzzle input: {input1}"),
     };
-
     let p2 = match input2 {
         "X" => p1.weaker(),
         "Y" => p1.equal(),
