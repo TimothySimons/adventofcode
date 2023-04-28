@@ -110,13 +110,11 @@ fn get_player_choices2(input1: &str, input2: &str) -> (RPS, RPS) {
 }
 
 fn play_game(p1: RPS, p2: RPS) -> (u32, u32) {
-    if p1 == p2 {
-        return (p1.value() + DRAW, p2.value() + DRAW);
-    } else if (p1 == RPS::Rock && p2 == RPS::Scissors)
-        || (p1 == RPS::Paper && p2 == RPS::Rock)
-        || (p1 == RPS::Scissors && p2 == RPS::Paper)
-    {
-        return (p1.value() + WIN, p2.value() + LOSE);
+    if p1.weaker() == p2 {
+        (p1.value() + WIN, p2.value() + LOSE)
+    } else if p1.equal() == p2 {
+        (p1.value() + DRAW, p2.value() + DRAW)
+    } else {
+        (p1.value() + LOSE, p2.value() + WIN)
     }
-    (p1.value() + LOSE, p2.value() + WIN)
 }
