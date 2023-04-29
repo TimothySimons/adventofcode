@@ -1,3 +1,5 @@
+// LEARNING TOPIC: General
+
 use std::fs;
 
 const WIN: u32 = 6;
