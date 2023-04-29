@@ -75,6 +75,8 @@ pub fn part2(file_path: &str) -> u32 {
     total
 }
 
+// An alternative is to implement the 'TryFrom' trait on 'RPS' - 'impl TryFrom<char> for RPS'.
+// 'TryFrom' instead of 'From' because this conversion is fallible. This would allow for RPS::try_from(some_char)
 fn get_player_choices(input1: &str, input2: &str) -> (RPS, RPS) {
     let p1 = match input1 {
         "A" => RPS::Rock,
@@ -107,6 +109,7 @@ fn get_player_choices2(input1: &str, input2: &str) -> (RPS, RPS) {
     (p1, p2)
 }
 
+// An alternative is encapsulate this logic in a 'Round' struct that uses 'Outcome' and 'RPS' enums.
 fn play_game(p1: RPS, p2: RPS) -> (u32, u32) {
     if p1.weaker() == p2 {
         (p1.value() + WIN, p2.value() + LOSE)
