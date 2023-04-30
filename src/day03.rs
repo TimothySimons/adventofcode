@@ -62,6 +62,10 @@ impl Compartment {
         }
         Ok(Self { items })
     }
+
+    fn contains(&self, item: &Item) -> bool {
+        self.items.contains(item)
+    }
 }
 
 struct RuckSack {
@@ -93,6 +97,25 @@ impl RuckSack {
             .find(|&item| self.compartment2.items.contains(item))
             .map(|dup| dup.priority)
     }
+
+    fn contains(&self, item: &Item) -> bool {
+        self.compartment1.contains(item) || self.compartment2.contains(item)
+    }
+}
+
+fn find_group_badge_priority(rucksack1: RuckSack, rucksack2: RuckSack, rucksack3: RuckSack) -> Option<u32> {
+    for item in rucksack1.compartment1.items {
+        if rucksack2.contains(&item) && rucksack3.contains(&item) {
+            // TODO: when to use return and when not to...
+            return Some(item.priority);
+        }
+    }
+    for item in rucksack1.compartment2.items {
+        if rucksack2.contains(&item) && rucksack3.contains(&item) {
+            return Some(item.priority);
+        }
+    }
+    None
 }
 
 pub fn part1(file_path: &str) -> u32 {
@@ -103,6 +126,21 @@ pub fn part1(file_path: &str) -> u32 {
         let rucksack = RuckSack::try_from(line).unwrap();
         let priority = rucksack.find_duplicate_priority().unwrap();
         total += priority;
+    }
+    total
+}
+
+pub fn part2(file_path: &str) -> u32 {
+    let puzzle_input = fs::read_to_string(file_path).unwrap();
+    let mut puzzle_input_iter = puzzle_input.split('\n').into_iter();
+    let mut total = 0;
+
+    while let Some(line) = puzzle_input_iter.next() {
+        let rucksack1 = RuckSack::try_from(line).unwrap();
+        let rucksack2 = RuckSack::try_from(puzzle_input_iter.next().unwrap()).unwrap();
+        let rucksack3 = RuckSack::try_from(puzzle_input_iter.next().unwrap()).unwrap();
+        // TODO: to reference or not to reference (function parameters)...
+        total += find_group_badge_priority(rucksack1, rucksack2, rucksack3).unwrap();
     }
     total
 }
