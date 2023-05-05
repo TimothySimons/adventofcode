@@ -1,16 +1,15 @@
-// LEARNING TOPIC: Data Modelling
-
 use std::collections::HashMap;
 use std::fs;
 
 // 'for' loops (like functions) cannot be used with 'const' or 'static'
 //  - 'const' values are inlined to each place they're used at compile time.
-//  - 'static' values are not inlined like 'const' but reside at a fixed location in memory (evaluated at compile time).
-// 'lazy_static' allows 'static's that require code to be executed at runtime (lazily when they are first accessed).
+//  - 'static' values are not inlined like 'const' but reside at a fixed location in memory 
+//    (evaluated at compile time). 
+//
+// 'lazy_static' allows 'static'-like behaviour on variables that need to be evaluated at runtime
+//    (which is done lazily; when the variable is first accessed).
 //  - 'lazy_static' is useful for storing thread-safe global variables and shared constant data.
-//  - overkill for this simple program, but we're learning :) and this is a useful crate to be aware of.
 //  - https://blog.logrocket.com/rust-lazy-static-pattern
-// Alternatively, 'HashMap' could be passed to the functions that need it (seems unidiomatic).
 lazy_static::lazy_static! {
     // 'static ref' is not part of the language, it's part of 'lazy_static'.
     static ref PRIORITY_MAP: HashMap<char, u32> = {
@@ -26,6 +25,10 @@ lazy_static::lazy_static! {
     };
 }
 
+// To prevent instantiation using the default constructor, the 'Item' struct can be wrapped inside
+// a 'mod' declaration and the new constructor can be made 'pub' - which makes it accessible by this crate.
+// This has the effect of creating an external (to the 'item' module) API for the defined data structure.
+// https://doc.rust-lang.org/reference/visibility-and-privacy.html
 #[derive(PartialEq)]
 struct Item {
     letter: char,
@@ -37,6 +40,12 @@ enum ItemError {
     InvalidChar(char),
 }
 
+// OOP-style solutions are almost always the incorrect approach.
+// - "Object orientated programs are offered as alternatives to correct ones..." ~ Edsger Dijkstra
+// - "Object-Oriented Programming is Bad" ~ Brian Will
+// - "Object-Oriented Programming — The Trillion Dollar Disaster" ~ Ilya Suzdalnitskiy
+// The solution is to only think of data as just data and then write a procedural/functional program.
+// (It is still a good idea to encapsulate the data in a data structure.)
 impl Item {
     fn new(letter: char) -> Result<Self, ItemError> {
         if !letter.is_alphabetic() {
@@ -103,10 +112,26 @@ impl RuckSack {
     }
 }
 
-fn find_group_badge_priority(rucksack1: RuckSack, rucksack2: RuckSack, rucksack3: RuckSack) -> Option<u32> {
+// "John Carmack on Inlined Code" ~ Jonathan Blow's blog
+//  - "If everything is just run out in a 2000 line function, it is obvious which part happens first,
+//    and you can be quite sure that the later section will get executed before the frame is rendered."
+//  - "Besides awareness of the actual code being executed, inlining functions also has the benefit
+//    of not making it possible to call the function from other places", which helps avoid bugs that
+//    arise from calling state-edit methods in multiple places (a pitfull that doesn't befall pure functions).
+//  - Essentially, if a function is only called from a single place, consider inlining it.
+//
+// Additionaly, 
+//  - Use large comment blocks inside the major function to delimit the (inligned) "minor functions".
+//  - Use Rust's {} to enforce scoping rules.
+//
+// A tangent to say that this function could be inligned...
+fn find_group_badge_priority(
+    rucksack1: RuckSack,
+    rucksack2: RuckSack,
+    rucksack3: RuckSack,
+) -> Option<u32> {
     for item in rucksack1.compartment1.items {
         if rucksack2.contains(&item) && rucksack3.contains(&item) {
-            // TODO: when to use return and when not to...
             return Some(item.priority);
         }
     }
@@ -139,7 +164,6 @@ pub fn part2(file_path: &str) -> u32 {
         let rucksack1 = RuckSack::try_from(line).unwrap();
         let rucksack2 = RuckSack::try_from(puzzle_input_iter.next().unwrap()).unwrap();
         let rucksack3 = RuckSack::try_from(puzzle_input_iter.next().unwrap()).unwrap();
-        // TODO: to reference or not to reference (function parameters)...
         total += find_group_badge_priority(rucksack1, rucksack2, rucksack3).unwrap();
     }
     total
