@@ -28,3 +28,6 @@ Learning Rust lang. through AoC 2022!
 #### Day 5
 - crate `thiserror`
 - To `panic!` or not to `panic!`
+
+#### Day 6
+- How to Write Tests
